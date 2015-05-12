@@ -1,6 +1,4 @@
 *.class
-.classpath
-.project
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -16,6 +14,15 @@ hs_err_pid*
 # intellij project files
 .idea
 .iml
+.iws
+out/
+
+# eclipse project files
+.classpath
+.project
+.metadata/
+.setting/
+bin/
 
 #temp files
 *~
