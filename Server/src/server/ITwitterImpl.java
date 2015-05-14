@@ -13,25 +13,21 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	@Override
 	public void connect(String pseudo, String pass) throws RemoteException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void tweet(String hashtag, String message) throws RemoteException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void newHashtag(String hashtag) throws RemoteException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void subscribe(String hashtag) throws RemoteException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
