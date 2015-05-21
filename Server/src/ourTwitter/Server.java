@@ -1,5 +1,7 @@
-package server;
+package ourTwitter;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -30,15 +32,21 @@ public class Server extends UnicastRemoteObject {
 		System.out.println("Server launched at " + this.url + "...");
 	}
 	
-	public static void main(String[] args) throws RemoteException, UnknownHostException, MalformedURLException {
+	public static void main(String[] args) throws IOException {
 	    // Pour le chargement dynamique des class
 		// Ici dans le code plutôt qu'en paramètre de lancement
-		System.setProperty("java.security.policy","file:./java.policy");
-        System.setProperty("java.rmi.server.codebase","file:/./bin/");
-        
+		System.setProperty("java.security.policy","file:.\\java.policy");
+		System.setProperty("java.rmi.ourTwitter.codebase", "file:.\\out");
 		if (System.getSecurityManager() == null) {
 	      System.setSecurityManager(new RMISecurityManager());
 	    }
+		File file = new File(".");
+		File[] files = file.listFiles();
+		System.out.println("Current dir : " + file.getCanonicalPath());
+		for (int fileInList = 0; fileInList < files.length; fileInList++)
+		{
+			System.out.println(files[fileInList].toString());
+		}
 		
 		Server s = new Server();
 		s.launch(1099);

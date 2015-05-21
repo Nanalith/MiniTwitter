@@ -1,4 +1,4 @@
-package server;
+package ourTwitter;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,8 +11,9 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	@Override
-	public void connect(String pseudo, String pass) throws RemoteException {
+	public boolean connect(String pseudo, String pass) throws RemoteException {
 		// TODO Auto-generated method stub
+		return true;
 	}
 
 	@Override
