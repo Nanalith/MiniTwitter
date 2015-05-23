@@ -10,6 +10,8 @@ import javax.naming.NamingException;
 public class Publisher {
     private javax.jms.Session sendSession = null;
     private javax.jms.MessageProducer sender = null;
+    private static final long   MESSAGE_LIFESPAN = 86400000; //30 minutes
+
 
     public void configurer(Connection connect) throws JMSException {
         try {  
@@ -27,6 +29,10 @@ public class Publisher {
         sender = sendSession.createProducer(topic);
         MapMessage mess = sendSession.createMapMessage();
         mess.setString("content", message);
-        sender.send(mess); // equivaut � publier dans le topic
+        sender.send(mess, javax.jms.DeliveryMode.PERSISTENT, //publish persistently
+                javax.jms.Message.DEFAULT_PRIORITY,//priority
+                MESSAGE_LIFESPAN); // equivaut � publier dans le topic
+
+
     }
 }

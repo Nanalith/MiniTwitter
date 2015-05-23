@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Hashtable;
 
+import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Topic;
@@ -102,7 +103,7 @@ public class Client {
 	}
 
 	public void subscribe(String tag) throws JMSException, NamingException {
-		addTopics(mySub.sabonner(tag, context));
+		addTopics(mySub.sabonner(tag, context, connect.getClientID()));
 		System.out.println(this.name + " is abonned to " + tag);
 	}
 
@@ -156,5 +157,18 @@ public class Client {
 		c2.subscribe("cookies");
 		c2.publish("cookies", "oui mais les browkies c'est encore mieux");
 
+		c2.getConnect().close();
+		c.publish("cookies", "j'aurai le dernier mot !");
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		c2.connect("Garance", "jaimeaussilesbrownies");
+
+	}
+
+	public Connection getConnect() {
+		return connect;
 	}
 }
