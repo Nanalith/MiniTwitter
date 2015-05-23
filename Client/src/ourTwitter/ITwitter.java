@@ -10,4 +10,5 @@ interface ITwitter extends Remote {
 	void subscribe(String hashtag) throws RemoteException;
 	List<String> receive(String hashtag) throws RemoteException;
 	List<String> retrieveTopics() throws RemoteException;
+	void createAccount(String pseudo, String pass) throws RemoteException;
 }
