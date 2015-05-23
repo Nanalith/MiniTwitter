@@ -37,9 +37,9 @@ public class Subscriber implements javax.jms.MessageListener {
         } catch (NamingException e) {
             e.printStackTrace();
         }
-    }
+    }  
     
-    public Topic souscripteur(String name) throws JMSException, NamingException{
+    public Topic sabonner(String name) throws JMSException, NamingException{
         Topic topic = (Topic) context.lookup("dynamicTopics/" + name);
           
         System.out.println("Topic name " + topic.getTopicName());
@@ -53,7 +53,7 @@ public class Subscriber implements javax.jms.MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            System.out.print("Message received : ");
+            System.out.print("Message received from " + message.getJMSDestination() + " : ");
             System.out.println(((MapMessage)message).getString("content"));
         } catch (JMSException e) {
             e.printStackTrace();
