@@ -37,13 +37,18 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	private void connectToBroker() {
 
 
-		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
+		Hashtable properties = new Hashtable();
+		properties.put(Context.INITIAL_CONTEXT_FACTORY,
+				"org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+		properties.put(Context.PROVIDER_URL, "tcp://localhost:61616");
 
 		// Create a Connection
 		ActiveMQConnection connection = null;
 		try {
-			connection = (ActiveMQConnection)connectionFactory.createConnection();
-
+			Context context = new InitialContext(properties);
+			ActiveMQConnectionFactory factory = (ActiveMQConnectionFactory) context.lookup("ConnectionFactory");
+			connection = (ActiveMQConnection)factory.createConnection();
+			
 			connection.start();
 			DestinationSource ds = connection.getDestinationSource();
 			Set<ActiveMQTopic> topics = ds.getTopics();
