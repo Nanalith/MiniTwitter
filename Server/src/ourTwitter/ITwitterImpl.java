@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
-
+	private static final long serialVersionUID = 1L;
 	private HashMap<String, String> usersMap;
 	private List<String> hashtagsList;
 
@@ -49,8 +49,12 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	@Override
-	public void createAccount(String pseudo, String pass) throws RemoteException {
+	public boolean createAccount(String pseudo, String pass) throws RemoteException {
+		if(usersMap.get(pseudo) != null)
+			return false;
+				
 		usersMap.put(pseudo, pass);
+		return true;
 	}
 
 	public HashMap<String, String> getUsersMap() {

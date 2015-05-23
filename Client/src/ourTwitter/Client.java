@@ -22,8 +22,11 @@ public class Client {
         }
         
 		ITwitter twitter = (ITwitter) Naming.lookup("rmi://" + InetAddress.getLocalHost().getHostAddress() + "/twitter");
-        System.out.println("Création du compte Nana");
-        twitter.createAccount("Nana", "jaimelescookies");
+        if(twitter.createAccount("Nana", "jaimelescookies"))
+        	System.out.println("Création du compte Nana OK");
+        else {
+        	System.out.println("Compte déjà existant");
+        }
         System.out.println("j'essaie de me connecter, et la réponse est : "+twitter.connect("Nana","jaimelescookies"));
 
         Subscriber mySub = new Subscriber();
