@@ -29,13 +29,11 @@ public class Client2 {
 		c2.subscribe("cookies");
 		c2.publish("cookies", "oui mais les browkies c'est encore mieux");
 		c2.disconnect();	
-		
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 		c2.connect("Garance", "jaimeaussilesbrownies");
 		c2.newTag("brownies");
 		c2.disconnect();

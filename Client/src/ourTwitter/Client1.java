@@ -32,7 +32,7 @@ public class Client1 {
 		c.publish("cookies", "les cookies c'est chouette");
 
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(6000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
