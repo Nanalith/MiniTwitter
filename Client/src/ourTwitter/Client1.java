@@ -25,14 +25,14 @@ public class Client1 {
 		Client c = new Client();
 		c.config();
 		c.createAccount("Nana", "jaimelescookies");
-		c.connect("Nana", "jaimelescookies"); // TODO securiser !
+		c.connect("Nana", "jaimelescookies");
 		c.retrieveTopics();
 		c.newTag("cookies");
 		c.subscribe("cookies");
 		c.publish("cookies", "les cookies c'est chouette");
 
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(6000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
