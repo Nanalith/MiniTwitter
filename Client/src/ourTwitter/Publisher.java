@@ -46,7 +46,8 @@ public class Publisher {
         sender = sendSession.createProducer(topic);
         //TODO: on pourrait aussi conserver les objets sender sur chaque topic où on a déjà publié, pour pas avoir à la recréer
         //à chaque fois ^^
-        TextMessage mess = sendSession.createTextMessage(message);
+        MapMessage mess = sendSession.createMapMessage();
+        mess.setString(hashTag, message);
         sender.send(mess); // equivaut à publier dans le topic
     }
 }
