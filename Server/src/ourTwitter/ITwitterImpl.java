@@ -107,7 +107,12 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 			sender.send(mess, javax.jms.DeliveryMode.PERSISTENT, //publish persistently
 					9,//maximum priority
 					MESSAGE_LIFESPAN); // equivaut à publier dans le topic
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
+			//problème uniquement dans le cas où on crée le tout premier topic hashtagList, alors qu'on n'est pas
+			//encore écrivain dessus : on essaie d'écrire que ce topic a été créé, impossible !
+		} catch (JMSException e) {
+			e.printStackTrace();
+		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 

@@ -19,7 +19,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 public class Client {
-	private ArrayList<Topic> topics = new ArrayList<Topic>();
+	private ArrayList<String> topics = new ArrayList<String>();
 	private Publisher myPub = new Publisher();
 	private Subscriber mySub = new Subscriber();
 	private ITwitter twitter;
@@ -45,11 +45,24 @@ public class Client {
 	public void connect(String login, String pass) throws RemoteException, JMSException, NamingException {
             connectToApacheMQ(twitter.connect(login, pass));
 		this.name = login;
+		resubscribeToEveryThing();
 		subscribe("hashtagList");
 		System.out.println(login + " is connected");
 	}
 
-    private void connectToApacheMQ(String clientId) throws JMSException {
+	private void resubscribeToEveryThing() {
+		for (String t : topics) {
+			try {
+				subscribe(t);
+			} catch (JMSException e) {
+				e.printStackTrace();
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void connectToApacheMQ(String clientId) throws JMSException {
             try {
                 // Create a connection
                 Hashtable<String, String> properties = new Hashtable<String, String>();
@@ -103,7 +116,7 @@ public class Client {
 	}
 
 	public void subscribe(String tag) throws JMSException, NamingException {
-		addTopics(mySub.sabonner(tag, context, connect.getClientID()));
+		addTopics(mySub.sabonner(tag, context, connect.getClientID()).getTopicName());
 		System.out.println(this.name + " is abonned to " + tag);
 	}
 
@@ -117,11 +130,11 @@ public class Client {
 		}
 	}
 
-	public ArrayList<Topic> getTopics() {
+	public ArrayList<String> getTopics() {
 		return topics;
 	}
 
-	public void addTopics(Topic t) {
+	public void addTopics(String t) {
 		topics.add(t);
 	}
 	

@@ -16,7 +16,7 @@ Notre projet répond aux fonctionnalités de base suivantes :
 1. Créer un compte MiniTwitter avec un login et un password
 2. Se connecter/déconnecter
 3. Créer un nouveau hashtag (lorsqu'on est connecté)
-4. S'abonner auprés d'un hashtag (lorsqu'on est connecté)
+4. S'abonner auprès d'un hashtag (lorsqu'on est connecté)
 5. Ecrire sur un hashtag (lorsqu'on est connecté)
 6. Lire les messages du topic (lorsqu'on est connecté)
 7. Voir la liste des topics (lorsqu'on est connecté)
@@ -28,7 +28,7 @@ Et aux fonctionnalités sophistiquées suivantes :
 
 Aspects non développés
 -------------------------------
-Tous les aspects ont été développé. 
+Tous les aspects ont été développés. 
 
 
 Organisation du code
