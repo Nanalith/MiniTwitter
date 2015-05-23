@@ -1,5 +1,7 @@
 package ourTwitter;
 
+import java.sql.Time;
+
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -40,12 +42,12 @@ public class Subscriber implements javax.jms.MessageListener {
         return topic;
     }
 
-    @Override
+	@Override
     public void onMessage(Message message) {
         try {
-            System.out.print("Message received from "
+            System.out.print("[" + new Time(message.getJMSTimestamp()) + "]Message received from "
 					+ message.getJMSDestination() + " : "
-					+ ((MapMessage) message).getString("content") + "\n");
+					+ ((MapMessage) message).getString("content") + "\n" );
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
