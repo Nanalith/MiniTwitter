@@ -20,11 +20,20 @@ public class Subscriber implements javax.jms.MessageListener {
         }
     }
 
+	public void disconnect() {
+		try {
+			receiveSession.close();
+		} catch (JMSException e) {
+			e.printStackTrace();
+			System.out.println("couldn't disconnect from receiving");
+		}
+	}
+
 	public Topic sabonner(String name, Context context, String clientId) throws JMSException, NamingException {
 		Topic topic = (Topic) context.lookup("dynamicTopics/" + name);
 
 		javax.jms.MessageConsumer topicReceiver = receiveSession
-				.createDurableSubscriber(topic, clientId);
+				.createDurableSubscriber(topic, clientId+topic);
 
 		topicReceiver.setMessageListener(this);
 

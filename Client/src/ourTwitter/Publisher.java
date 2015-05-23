@@ -19,7 +19,17 @@ public class Publisher {
             jmse.printStackTrace();
         }
     }
-   
+
+
+    public void disconnect() {
+        try {
+            sendSession.close();
+        } catch (JMSException e) {
+            e.printStackTrace();
+            System.out.println("couldn't disconnect from receiving");
+        }
+    }
+
     public void tweet(String hashTag, String message, Context context) throws JMSException, NamingException {
         Topic topic = (Topic) context.lookup("dynamicTopics/"+hashTag);
         sender = sendSession.createProducer(topic);
@@ -28,5 +38,6 @@ public class Publisher {
         sender.send(mess, javax.jms.DeliveryMode.PERSISTENT, //publish persistently
                 javax.jms.Message.DEFAULT_PRIORITY,//priority
                 MESSAGE_LIFESPAN); // equivaut a publier dans le topic
+        sender.close();
     }
 }

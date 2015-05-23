@@ -25,7 +25,7 @@ public class Client1 {
 		Client c = new Client();
 		c.config();
 		c.createAccount("Nana", "jaimelescookies");
-		c.connect("Nana", "jaimelescookies"); // TODO securiser !
+		c.connect("Nana", "jaimelescookies");
 		c.retrieveTopics();
 		c.newTag("cookies");
 		c.subscribe("cookies");

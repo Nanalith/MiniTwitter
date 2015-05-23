@@ -37,6 +37,7 @@ public class Client2 {
 		}
 		
 		c2.connect("Garance", "jaimeaussilesbrownies");
+		c2.newTag("brownies");
 		c2.disconnect();
 	}
 

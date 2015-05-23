@@ -37,15 +37,16 @@ public class Client {
 	public void createAccount(String login, String pass) throws RemoteException {
 		if (twitter.createAccount(login, pass)) {
 			System.out.println("Creation of the account " + login + " OK");
-			this.name = login;
 		} else {
 			System.out.println("Account already exists");
 		}
 	}
 
-	public void connect(String login, String pass) throws RemoteException, JMSException {
+	public void connect(String login, String pass) throws RemoteException, JMSException, NamingException {
             connectToApacheMQ(twitter.connect(login, pass));
-			System.out.println(login + " is connected");
+		this.name = login;
+		subscribe("hashtagList");
+		System.out.println(login + " is connected");
 	}
 
     private void connectToApacheMQ(String clientId) throws JMSException {
@@ -131,7 +132,9 @@ public class Client {
 	public void disconnect() {
 		try {
 			this.connect.close();
-			System.out.println(this.name + " is deconnected");
+			mySub.disconnect();
+			myPub.disconnect();
+			System.out.println(this.name + " is disconnected");
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
