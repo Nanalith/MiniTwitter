@@ -28,12 +28,12 @@ Notre projet répond aux fonctionnalités de base suivantes :
 
 Et aux fonctionnalités sophistiquées suivantes :
 8. "Dans une version plus sophistiquée, on pourrait utiliser un topic (auquel tous les clients souscrivent) permettant de diffuser l'information quant à l'existance d'un nouvel hashtag." 
-9. "Dans une version plus sophistiquée, il faudrait trouver un moyen pour que les topics soient non seulement persistants (même si le serveur tweeter est éteint), mais les messages qu'ils contiennent également et qu'un abonné à un tel topic puisse également être notifié des messages publiés alors qu'il n'était pas connecté."
+9. "Dans une version plus sophistiquée, il faudrait trouver un moyen pour que les topics soient non seulement persistants (même si le serveur tweeter est éteint) et qu'un abonné à un tel topic puisse également être notifié des messages publiés alors qu'il n'était pas connecté."
 
 
 Aspects non développés
 -------------------------------
-Tous les aspects ont été développé. 
+Tous les aspects ont été développé sauf la persistence des messages des topics. 
 
 
 Organisation du code

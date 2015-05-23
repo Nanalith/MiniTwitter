@@ -49,10 +49,7 @@ public class Client {
 	}
 
 	private void resubscribeToEveryThing(String login) throws RemoteException {
-		System.out.println("list of topics");
-
 		for(String aTopic: topics) {
-			System.out.println(aTopic);
 			try {
 				mySub.sabonner(aTopic, context, connect.getClientID()).getTopicName();
 			} catch (JMSException e) {
