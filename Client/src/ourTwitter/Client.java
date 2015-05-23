@@ -1,9 +1,5 @@
 package ourTwitter;
 
-
-import javax.jms.JMSException;
-import javax.jms.Topic;
-
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -12,7 +8,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
+
+import javax.jms.JMSException;
+import javax.jms.Topic;
+import javax.naming.NamingException;
 
 public class Client {
 	private ArrayList<Topic> topics = new ArrayList<Topic>();
@@ -30,7 +29,7 @@ public class Client {
     	
     	System.out.println("Bonjour, je me connecte � Twitter ! #Awesome");
         
-        System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"/java.policy");
+        System.setProperty("java.security.policy", "file:" + System.getProperty("user.dir") + "/java.policy");
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager());
@@ -42,16 +41,26 @@ public class Client {
         else {
         	System.out.println("Compte déjà existant");
         }
+        
         System.out.println("j'essaie de me connecter, et la réponse est : "+twitter.connect("Nana","jaimelescookies"));
-    
 
         Publisher myPub = new Publisher();
         myPub.configurer();
         
         Subscriber mySub = new Subscriber();
-        c.addTopics(mySub.configurer());
+        c.addTopics(mySub.configurer()); // TODO pour l'instant s'abonne à exo2 
         System.out.println("My topics:" + c.getTopics());
-              
+ 
+
+        System.out.println("Création d'un topic \"cookies\"");
+        twitter.newHashtag("cookies");
+        try {
+            System.out.println("Ecriture sur le hashtag cookies");
+            myPub.tweet("cookies", "les cookies c'est chouette ");
+        } catch (NamingException e) {
+            e.printStackTrace();
+            System.out.println("couldn't write to the topic :(");
+        }
     }
 }
 
