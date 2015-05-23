@@ -26,10 +26,17 @@ public class Server extends UnicastRemoteObject {
 		this.url += ip + "/twitter";
     }
 	
-	public void launch(int port) throws RemoteException, MalformedURLException {
-		LocateRegistry.createRegistry(port);
-		Naming.rebind(this.url, this.twitter);
-		System.out.println("Server launched at " + this.url + "...");
+	public void launch(int port) {
+		try {
+			LocateRegistry.createRegistry(port);
+			Naming.rebind(this.url, this.twitter);
+			System.out.println("Server launched at " + this.url + "...");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+
+		}
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -40,15 +47,10 @@ public class Server extends UnicastRemoteObject {
 		if (System.getSecurityManager() == null) {
 	      System.setSecurityManager(new RMISecurityManager());
 	    }
-		File file = new File(".");
-		File[] files = file.listFiles();
-		System.out.println("Current dir : " + file.getCanonicalPath());
-		for (int fileInList = 0; fileInList < files.length; fileInList++)
-		{
-			System.out.println(files[fileInList].toString());
-		}
+
 		
 		Server s = new Server();
+
 		s.launch(1099);
 	}
 }

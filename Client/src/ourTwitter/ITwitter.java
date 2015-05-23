@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 interface ITwitter extends Remote {
-	boolean connect(String pseudo, String pass) throws RemoteException;
+	String connect(String pseudo, String pass) throws RemoteException;
 
 	void newHashtag(String hashtag) throws RemoteException;
 

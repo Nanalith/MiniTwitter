@@ -8,9 +8,13 @@ import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
+import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Topic;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 public class Client {
@@ -20,12 +24,15 @@ public class Client {
 	private ITwitter twitter;
 	private String name;
 
+    private javax.jms.Connection connect = null;
+    InitialContext context = null;
+
 	public void config() throws JMSException, MalformedURLException,
 			RemoteException, UnknownHostException, NotBoundException {
 		twitter = (ITwitter) Naming.lookup("rmi://"
 				+ InetAddress.getLocalHost().getHostAddress() + "/twitter");
-		myPub.configurer();
-		mySub.configurer();
+	//	myPub.configurer();
+	//	mySub.configurer();
 	}
 
 	public void createAccount(String login, String pass) throws RemoteException {
@@ -37,27 +44,50 @@ public class Client {
 		}
 	}
 
-	public void connect(String login, String pass) throws RemoteException {
-		if (twitter.connect(login, pass)) {
+	public void connect(String login, String pass) throws RemoteException, JMSException {
+            connectToApacheMQ(twitter.connect(login, pass));
 			System.out.println(login + " is connected");
-		} else {
-			System.out.println("Connection failed : login or pass invalid");
-		}
 	}
 
-	public void newTag(String tag) throws RemoteException {
+    private void connectToApacheMQ(String clientId) throws JMSException {
+            try {
+                // Create a connection
+                Hashtable<String, String> properties = new Hashtable<String, String>();
+                properties.put(Context.INITIAL_CONTEXT_FACTORY,
+                        "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+                properties.put(Context.PROVIDER_URL, "tcp://localhost:61616");
+
+                context = new InitialContext(properties);
+
+                javax.jms.ConnectionFactory factory = (ConnectionFactory) context
+                        .lookup("ConnectionFactory");
+                connect = factory.createConnection();
+                connect.setClientID(clientId);
+                connect.start();
+
+                myPub.configurer(connect);
+                mySub.configurer(connect);
+
+            } catch (javax.jms.JMSException jmse) {
+                jmse.printStackTrace();
+            } catch (NamingException e) {
+                e.printStackTrace();
+            }
+    }
+
+    public void newTag(String tag) throws RemoteException {
 		twitter.newHashtag(tag);
 		System.out.println(this.name + " created the topic " + tag);
 	}
 
 	public void sabonner(String tag) throws JMSException, NamingException {
-		addTopics(mySub.sabonner(tag));
+		addTopics(mySub.sabonner(tag, context));
 		System.out.println(this.name + " is abonned to " + tag);
 	}
 
 	public void publier(String tag, String message) throws JMSException {
 		try {
-			myPub.tweet(tag, message);
+			myPub.tweet(tag, message, context);
 			System.out.println(this.name + " wrote on the tag " + tag);
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -101,6 +131,8 @@ public class Client {
 		c2.connect("Garance", "jaimeaussilesbrownies");
 		c2.sabonner("cookies");
 		c2.publier("cookies", "oui mais les browkies c'est encore mieux");
+
+
 
 	}
 }

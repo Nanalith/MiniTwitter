@@ -2,11 +2,7 @@ package ourTwitter;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.jms.JMSException;
 import javax.jms.Session;
@@ -21,13 +17,14 @@ import org.apache.activemq.command.ActiveMQTopic;
 
 public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	private static final long serialVersionUID = 1L;
-	private HashMap<String, String> usersMap;
+	private HashMap<String, AbstractMap.SimpleEntry<String, String>> usersMap;
 	private List<String> hashtagsList;
 
 	private Session session;
 
 	protected ITwitterImpl() throws RemoteException {
 		super();
+
 		usersMap = new HashMap<>();
 		hashtagsList = new ArrayList<>();
 		connectToBroker();
@@ -45,7 +42,7 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 			Context context = new InitialContext(properties);
 			ActiveMQConnectionFactory factory = (ActiveMQConnectionFactory) context.lookup("ConnectionFactory");
 			connection = (ActiveMQConnection)factory.createConnection();
-			
+			//connection.getClientID()
 			connection.start();
 			DestinationSource ds = connection.getDestinationSource();
 			Set<ActiveMQTopic> topics = ds.getTopics();
@@ -61,8 +58,10 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	@Override
-	public boolean connect(String pseudo, String pass) throws RemoteException {
-		return usersMap.get(pseudo).equals(pass);
+	public String connect(String pseudo, String pass) throws RemoteException {
+		if (usersMap.get(pseudo).getKey().equals(pass))
+		return usersMap.get(pseudo).getValue();
+		return null;
 	}
 
 	@Override
@@ -85,16 +84,15 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	public boolean createAccount(String pseudo, String pass) throws RemoteException {
 		if(usersMap.get(pseudo) != null)
 			return false;
-				
-		usersMap.put(pseudo, pass);
+		usersMap.put(pseudo, new AbstractMap.SimpleEntry<String, String>(pass, ""+usersMap.size()));
 		return true;
 	}
 
-	public HashMap<String, String> getUsersMap() {
+	public HashMap<String, AbstractMap.SimpleEntry<String, String>> getUsersMap() {
 		return usersMap;
 	}
 
-	public void setUsersMap(HashMap<String, String> usersMap) {
+	public void setUsersMap(HashMap<String, AbstractMap.SimpleEntry<String, String>> usersMap) {
 		this.usersMap = usersMap;
 	}
 
@@ -105,4 +103,5 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	public void setHashtagsList(List<String> hashtagsList) {
 		this.hashtagsList = hashtagsList;
 	}
+
 }
