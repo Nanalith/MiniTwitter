@@ -165,6 +165,8 @@ public class Client {
 			e.printStackTrace();
 		}
 		c2.connect("Garance", "jaimeaussilesbrownies");
+		c2.subscribe("cookies");
+
 
 	}
 
