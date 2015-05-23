@@ -35,10 +35,8 @@ public class Server extends UnicastRemoteObject {
 	public static void main(String[] args) throws IOException {
 	    // Pour le chargement dynamique des class
 		// Ici dans le code plutôt qu'en paramètre de lancement
-		System.setProperty("java.security.policy","file:.\\java.policy");
-		System.setProperty("java.rmi.ourTwitter.codebase", "file:.\\out");
-		//System.setProperty("java.security.policy","file:./java.policy");
-		//System.setProperty("java.rmi.ourTwitter.codebase", "file:./bin");
+		System.setProperty("java.security.policy","file:./java.policy");
+		System.setProperty("java.rmi.ourTwitter.codebase", "file:./bin");
 		if (System.getSecurityManager() == null) {
 	      System.setSecurityManager(new RMISecurityManager());
 	    }

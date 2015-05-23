@@ -15,8 +15,7 @@ public class Client {
     public static void main(String[] args) throws RemoteException, MalformedURLException, UnknownHostException, NotBoundException, JMSException {
         System.out.println("Bonjour, je me connecte � Twitter ! #Awesome");
         
-        System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"\\java.policy");
-        //System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"/java.policy");
+        System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"/java.policy");
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager());
