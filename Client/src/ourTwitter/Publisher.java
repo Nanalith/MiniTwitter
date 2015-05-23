@@ -1,8 +1,9 @@
 package ourTwitter;
 
-import java.util.Hashtable;
-
-import javax.jms.*;
+import javax.jms.Connection;
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
