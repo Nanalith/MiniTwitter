@@ -12,4 +12,7 @@ interface ITwitter extends Remote {
 	boolean createAccount(String pseudo, String pass) throws RemoteException;
 
 	List<String> retrieveTopics() throws RemoteException;
+
+	List<String> getMandatoryTopics(String pseudo) throws RemoteException;
+
 }

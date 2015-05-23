@@ -46,7 +46,7 @@ et la création de hashtags
 et les abonnements (avec en début de connexion l'abonnement au topic spécial pour être notifié de nouveau hashtag)
 
 ###Un projet pour le client
-Le client appele les methodes distantes du server RMI pour l'authentification, les créations de hashtags et abonnement.
+Le client appele les methodes distantes du server RMI pour l'authentification, les créations de hashtags et abonnements.
 Le client possède un Publisher pour écrire et un subscriber pour recevoir.
 
 
