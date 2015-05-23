@@ -63,7 +63,7 @@ public class Client {
 		}
 
 		List<String> mandatoryTopics = twitter.getMandatoryTopics(login);
-		for(String mandTops: topics)
+		for(String mandTops: mandatoryTopics)
 			try {
 				mySub.sabonner(mandTops, context, connect.getClientID()).getTopicName();
 			} catch (JMSException e) {
@@ -101,7 +101,6 @@ public class Client {
 
 	public void retrieveTopics() {	
 		List<String> sujets = new ArrayList<String>();
-
 		try {
 			sujets = twitter.retrieveTopics();
 		} catch (RemoteException e) {
