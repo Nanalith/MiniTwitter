@@ -44,12 +44,15 @@ public class Client {
 	public void connect(String login, String pass) throws RemoteException, JMSException, NamingException {
             connectToApacheMQ(twitter.connect(login, pass));
 		this.name = login;
-		//resubscribeToEveryThing(login);
+		resubscribeToEveryThing(login);
 		System.out.println(login + " is connected");
 	}
 
 	private void resubscribeToEveryThing(String login) throws RemoteException {
-		for(String aTopic: topics)
+		System.out.println("list of topics");
+
+		for(String aTopic: topics) {
+			System.out.println(aTopic);
 			try {
 				mySub.sabonner(aTopic, context, connect.getClientID()).getTopicName();
 			} catch (JMSException e) {
@@ -57,6 +60,7 @@ public class Client {
 			} catch (NamingException e) {
 				e.printStackTrace();
 			}
+		}
 
 		List<String> mandatoryTopics = twitter.getMandatoryTopics(login);
 		for(String mandTops: topics)
@@ -151,9 +155,9 @@ public class Client {
 	
 	public void disconnect() {
 		try {
-			this.connect.close();
 			mySub.disconnect();
 			myPub.disconnect();
+			this.connect.close();
 			System.out.println(this.name + " is disconnected");
 		} catch (JMSException e) {
 			e.printStackTrace();
