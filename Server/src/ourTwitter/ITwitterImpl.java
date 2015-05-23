@@ -17,7 +17,7 @@ import org.apache.activemq.command.ActiveMQTopic;
 
 public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	private static final long serialVersionUID = 1L;
-	private HashMap<String, AbstractMap.SimpleEntry<String, String>> usersMap;
+	private HashMap<String, User> usersMap;
 	private List<String> hashtagsList;
 
 	private javax.jms.Session sendSession = null;
@@ -75,8 +75,8 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 
 	@Override
 	public String connect(String pseudo, String pass) throws RemoteException {
-		if (usersMap.get(pseudo).getKey().equals(pass))
-		return usersMap.get(pseudo).getValue();
+		if (usersMap.get(pseudo).getPassword().equals(pass))
+		return usersMap.get(pseudo).getUserId();
 		return null;
 	}
 
@@ -124,15 +124,16 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	@Override
+	public List<String> getMandatoryTopics(String pseudo) throws RemoteException {
+		return usersMap.get(pseudo).getTopicsList();
+	}
+
+	@Override
 	public boolean createAccount(String pseudo, String pass) throws RemoteException {
 		if(usersMap.get(pseudo) != null)
 			return false;
-		usersMap.put(pseudo, new AbstractMap.SimpleEntry<String, String>(pass, ""+usersMap.size()));
+		usersMap.put(pseudo, new User(pass, ""+usersMap.size()));
 		return true;
-	}
-
-	public HashMap<String, AbstractMap.SimpleEntry<String, String>> getUsersMap() {
-		return usersMap;
 	}
 
 }

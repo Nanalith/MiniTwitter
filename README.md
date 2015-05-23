@@ -41,7 +41,7 @@ Le server RMI gère l'authentification et la création de hashtags
 ###Un projet pour le client
 Pour créer un compte et se connecter et se déconnecter, le client fait appel au server RMI (methode de l'interface).
 Le client possède un Publisher pour écrire et un subscriber pour recevoir et s'abonner.
-Pour créer un nouvel hashtag, le client passe par le server RMI qui lui va enregistrer le tag auprès du server Apache.
+Pour créer un nouvel hashtag, le client passe par le server RMI qui lui va enregistrer le tag auprès du serveur Apache.
 	
 
 Difficultés rencontrées
