@@ -74,9 +74,6 @@ public class Client {
             }
     }
 
-    public void newTag(String tag) throws RemoteException {
-		twitter.newHashtag(tag);
-		System.out.println(this.name + " created the topic " + tag);
 	public void retrieveTopics() {	
 		List<String> sujets = new ArrayList<String>();
 		
@@ -104,12 +101,12 @@ public class Client {
 		}	
 	}
 
-	public void sabonner(String tag) throws JMSException, NamingException {
+	public void subscribe(String tag) throws JMSException, NamingException {
 		addTopics(mySub.sabonner(tag, context));
 		System.out.println(this.name + " is abonned to " + tag);
 	}
 
-	public void publier(String tag, String message) throws JMSException {
+	public void publish(String tag, String message) throws JMSException {
 		try {
 			myPub.tweet(tag, message, context);
 			System.out.println(this.name + " wrote on the tag " + tag + "the message " + message);
