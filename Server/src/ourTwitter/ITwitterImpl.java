@@ -1,24 +1,19 @@
 package ourTwitter;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import javax.jms.JMSException;
+import javax.jms.Session;
+
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.advisory.DestinationSource;
-import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
-
-import javax.jms.*;
-import javax.management.JMX;
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXPrincipal;
-import javax.management.remote.JMXServiceURL;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
 
 public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	private static final long serialVersionUID = 1L;
@@ -35,8 +30,6 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	private void connectToBroker() {
-
-
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
 
 		// Create a Connection
@@ -56,7 +49,6 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 			e.printStackTrace();
 			System.out.println("couldn't connect to Apache");
 		}
-
 	}
 
 	@Override
@@ -65,32 +57,14 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	@Override
-	public void tweet(String hashtag, String message) throws RemoteException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void newHashtag(String hashtag) throws RemoteException {
-		// Create the destination (Topic or Queue)
+		// Create the destination (topic)
 		try {
-			Destination destination = session.createTopic(hashtag);
+			session.createTopic(hashtag);
 		} catch (JMSException e) {
 			System.out.println("couldn't create the hashtag ! :(");
 		}
-
 		hashtagsList.add(hashtag);
-
-	}
-
-	@Override
-	public void subscribe(String hashtag) throws RemoteException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public List<String> receive(String hashtag) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

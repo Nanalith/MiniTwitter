@@ -18,7 +18,7 @@ public class Publisher {
 
     public void configurer() throws JMSException {
         try {  
-            Hashtable properties = new Hashtable();
+            Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY,
                     "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
             properties.put(Context.PROVIDER_URL, "tcp://localhost:61616");
