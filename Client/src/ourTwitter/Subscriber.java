@@ -4,7 +4,6 @@ import java.util.Hashtable;
 
 import javax.jms.*;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 public class Subscriber implements javax.jms.MessageListener {
@@ -19,12 +18,12 @@ public class Subscriber implements javax.jms.MessageListener {
         }
     }
 
-	public Topic sabonner(String name, Context context) throws JMSException, NamingException {
+	public Topic sabonner(String name, Context context, String clientId) throws JMSException, NamingException {
 		Topic topic = (Topic) context.lookup("dynamicTopics/" + name);
 
 		System.out.println("Topic name " + topic.getTopicName());
 		javax.jms.MessageConsumer topicReceiver = receiveSession
-				.createConsumer(topic);
+				.createDurableSubscriber(topic, clientId);
 
 		topicReceiver.setMessageListener(this);
 
