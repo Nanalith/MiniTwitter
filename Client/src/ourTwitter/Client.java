@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.jms.JMSException;
 import javax.jms.Topic;
@@ -45,6 +46,25 @@ public class Client {
 		}
 	}
 
+	public void retrieveTopics() {	
+		List<String> sujets = new ArrayList<String>();
+		
+		try {
+			sujets = twitter.retrieveTopics();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		if(sujets.size() > 0) {
+			System.out.println("List of the topics :");
+			for(String topic : sujets) {
+				System.out.println("\t-" + topic);
+			} 
+		} else {
+			System.out.println("No topics");
+		}
+	}
+	
 	public void newTag(String tag) throws RemoteException {
 		twitter.newHashtag(tag);
 		System.out.println(this.name + " created the topic " + tag);
@@ -72,6 +92,7 @@ public class Client {
 	public void addTopics(Topic t) {
 		topics.add(t);
 	}
+	
 
 	public static void main(String[] args) throws RemoteException,
 			MalformedURLException, UnknownHostException, NotBoundException,
@@ -89,6 +110,7 @@ public class Client {
 		c.config();
 		c.createAccount("Nana", "jaimelescookies");
 		c.connect("Nana", "jaimelescookies"); // TODO securiser !
+		c.retrieveTopics();
 		c.newTag("cookies"); // TODO gerer si on créer 2 fois le meme tag
 		c.sabonner("cookies");
 		c.publier("cookies", "les cookies c'est chouette");
@@ -99,6 +121,7 @@ public class Client {
 		c2.config();
 		c2.createAccount("Garance", "jaimeaussilesbrownies");
 		c2.connect("Garance", "jaimeaussilesbrownies");
+		c2.retrieveTopics();
 		c2.sabonner("cookies");
 		c2.publier("cookies", "oui mais les browkies c'est encore mieux");
 

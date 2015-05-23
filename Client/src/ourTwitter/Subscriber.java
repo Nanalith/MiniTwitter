@@ -18,7 +18,6 @@ public class Subscriber implements javax.jms.MessageListener {
 
 	public void configurer() throws JMSException {
 		try {
-			// Create a connection
 			Hashtable<String, String> properties = new Hashtable<String, String>();
 			properties.put(Context.INITIAL_CONTEXT_FACTORY,
 					"org.apache.activemq.jndi.ActiveMQInitialContextFactory");
@@ -43,13 +42,9 @@ public class Subscriber implements javax.jms.MessageListener {
 
 	public Topic sabonner(String name) throws JMSException, NamingException {
 		Topic topic = (Topic) context.lookup("dynamicTopics/" + name);
-
-		System.out.println("Topic name " + topic.getTopicName());
 		javax.jms.MessageConsumer topicReceiver = receiveSession
 				.createConsumer(topic);
-
 		topicReceiver.setMessageListener(this);
-
 		return topic;
 	}
 
