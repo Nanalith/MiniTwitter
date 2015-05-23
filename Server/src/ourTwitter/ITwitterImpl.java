@@ -65,7 +65,10 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	@Override
-	public void newHashtag(String hashtag) throws RemoteException {
+	public boolean newHashtag(String hashtag) throws RemoteException {
+		if(this.hashtagsList.contains(hashtag))
+			return false;
+		
 		// Create the destination (topic)
 		try {
 			session.createTopic(hashtag);
@@ -73,6 +76,8 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 			System.out.println("couldn't create the hashtag ! :(");
 		}
 		hashtagsList.add(hashtag);
+		
+		return true;
 	}
 
 	@Override
