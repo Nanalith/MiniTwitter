@@ -2,6 +2,7 @@ package ourTwitter;
 
 
 import javax.jms.JMSException;
+import javax.naming.NamingException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -15,7 +16,7 @@ public class Client {
     public static void main(String[] args) throws RemoteException, MalformedURLException, UnknownHostException, NotBoundException, JMSException {
         System.out.println("Bonjour, je me connecte � Twitter ! #Awesome");
         
-        System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"/java.policy");
+        System.setProperty("java.security.policy", "file:" + System.getProperty("user.dir") + "/java.policy");
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager());
@@ -27,13 +28,23 @@ public class Client {
         else {
         	System.out.println("Compte déjà existant");
         }
-        System.out.println("j'essaie de me connecter, et la réponse est : "+twitter.connect("Nana","jaimelescookies"));
+        System.out.println("j'essaie de me connecter, et la réponse est : " + twitter.connect("Nana", "jaimelescookies"));
 
-        Subscriber mySub = new Subscriber();
-        mySub.configurer();
+//        Subscriber mySub = new Subscriber();
+  //      mySub.configurer();
 
         Publisher myPub = new Publisher();
         myPub.configurer();
+
+        System.out.println("Création d'un topic \"cookies\"");
+        twitter.newHashtag("cookies");
+        try {
+            System.out.println("Ecriture sur le hashtag cookies");
+            myPub.tweet("cookies", "les cookies c'est chouette ");
+        } catch (NamingException e) {
+            e.printStackTrace();
+            System.out.println("couldn't write to the topic :(");
+        }
 
         /*
         Alors, là en gros j'ai juste copié collé le code corrigé du tp...
