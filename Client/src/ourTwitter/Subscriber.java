@@ -1,10 +1,11 @@
 package ourTwitter;
 
-import java.util.Hashtable;
-
-import javax.jms.*;
+import javax.jms.Connection;
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.Topic;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 public class Subscriber implements javax.jms.MessageListener {
