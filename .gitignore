@@ -23,6 +23,8 @@ out/
 .metadata/
 .setting/
 bin/
+Server/activemq-data/localhost/KahaDB/
+
 
 #temp files
 *~

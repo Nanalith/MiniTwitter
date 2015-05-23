@@ -16,89 +16,91 @@ import javax.naming.NamingException;
 public class Client {
 	private ArrayList<Topic> topics = new ArrayList<Topic>();
 	private Publisher myPub = new Publisher();
-    private Subscriber mySub = new Subscriber();
-    private ITwitter twitter;
-    private String name;
-     	
-	public void config() throws JMSException, MalformedURLException, RemoteException, UnknownHostException, NotBoundException {
-		twitter = (ITwitter) Naming.lookup("rmi://" + InetAddress.getLocalHost().getHostAddress() + "/twitter");
+	private Subscriber mySub = new Subscriber();
+	private ITwitter twitter;
+	private String name;
+
+	public void config() throws JMSException, MalformedURLException,
+			RemoteException, UnknownHostException, NotBoundException {
+		twitter = (ITwitter) Naming.lookup("rmi://"
+				+ InetAddress.getLocalHost().getHostAddress() + "/twitter");
 		myPub.configurer();
-		mySub.configurer(); 		
+		mySub.configurer();
 	}
-	
+
 	public void createAccount(String login, String pass) throws RemoteException {
-		if(twitter.createAccount(login, pass)) {
-        	System.out.println("Creation of the account " + login + " OK");
-        	this.name = login;
-        }
-        else {
-        	System.out.println("Account already exists");
-        }
+		if (twitter.createAccount(login, pass)) {
+			System.out.println("Creation of the account " + login + " OK");
+			this.name = login;
+		} else {
+			System.out.println("Account already exists");
+		}
 	}
-	
+
 	public void connect(String login, String pass) throws RemoteException {
-		if(twitter.connect(login,pass)) {
+		if (twitter.connect(login, pass)) {
 			System.out.println(login + " is connected");
 		} else {
 			System.out.println("Connection failed : login or pass invalid");
 		}
 	}
-    
-    public void newTag(String tag) throws RemoteException {   	 
-         twitter.newHashtag(tag);
-         System.out.println(this.name + " created the topic " + tag);
-    }
-    
-    public void sabonner(String tag) throws JMSException, NamingException {
-    	addTopics(mySub.sabonner(tag));
-    	System.out.println(this.name + " is abonned to " + tag);
-    }
-    
-    public void publier(String tag, String message) throws JMSException {
-    	try {            
-            myPub.tweet(tag, message);
-            System.out.println(this.name + " wrote on the tag " + tag);
-        } catch (NamingException e) {
-            e.printStackTrace();
-            System.out.println("Couldn't write to the topic :(");
-        }
-    }
-	
-    public ArrayList<Topic> getTopics() {
+
+	public void newTag(String tag) throws RemoteException {
+		twitter.newHashtag(tag);
+		System.out.println(this.name + " created the topic " + tag);
+	}
+
+	public void sabonner(String tag) throws JMSException, NamingException {
+		addTopics(mySub.sabonner(tag));
+		System.out.println(this.name + " is abonned to " + tag);
+	}
+
+	public void publier(String tag, String message) throws JMSException {
+		try {
+			myPub.tweet(tag, message);
+			System.out.println(this.name + " wrote on the tag " + tag);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			System.out.println("Couldn't write to the topic :(");
+		}
+	}
+
+	public ArrayList<Topic> getTopics() {
 		return topics;
 	}
-    
-    public void addTopics(Topic t) {
+
+	public void addTopics(Topic t) {
 		topics.add(t);
-	}  
-    
+	}
 
-	public static void main(String[] args) throws RemoteException, MalformedURLException, UnknownHostException, NotBoundException, JMSException, NamingException {
+	public static void main(String[] args) throws RemoteException,
+			MalformedURLException, UnknownHostException, NotBoundException,
+			JMSException, NamingException {
 		System.out.println("Bienvenue sur Twitter ! #Awesome");
-		
-        System.setProperty("java.security.policy", "file:" + System.getProperty("user.dir") + "/java.policy");
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new RMISecurityManager());
-        }
 
-        // Création et configuration du client
-        Client c = new Client();
-        c.config();
-        c.createAccount("Nana", "jaimelescookies");
-        c.connect("Nana", "jaimelescookies"); //TODO securiser !
-        c.newTag("cookies"); // TODO gerer si on créer 2 fois le meme tag
-        c.sabonner("cookies");
-        c.publier("cookies", "les cookies c'est chouette");
-        
-        System.out.println("\n--------\n");
-        // Deuxieme client
-        Client c2 = new Client();
-        c2.config();
-        c2.createAccount("Garance", "jaimeaussilesbrownies");
-        c2.connect("Garance", "jaimeaussilesbrownies");
-        c2.sabonner("cookies");
-        c2.publier("cookies", "oui mais les browkies c'est encore mieux");
-        
-    }
+		System.setProperty("java.security.policy",
+				"file:" + System.getProperty("user.dir") + "/java.policy");
+		if (System.getSecurityManager() == null) {
+			System.setSecurityManager(new RMISecurityManager());
+		}
+
+		// Création et configuration du client
+		Client c = new Client();
+		c.config();
+		c.createAccount("Nana", "jaimelescookies");
+		c.connect("Nana", "jaimelescookies"); // TODO securiser !
+		c.newTag("cookies"); // TODO gerer si on créer 2 fois le meme tag
+		c.sabonner("cookies");
+		c.publier("cookies", "les cookies c'est chouette");
+
+		System.out.println("\n--------\n");
+		// Deuxieme client
+		Client c2 = new Client();
+		c2.config();
+		c2.createAccount("Garance", "jaimeaussilesbrownies");
+		c2.connect("Garance", "jaimeaussilesbrownies");
+		c2.sabonner("cookies");
+		c2.publier("cookies", "oui mais les browkies c'est encore mieux");
+
+	}
 }
-

@@ -4,16 +4,20 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
 import javax.jms.JMSException;
 import javax.jms.Session;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.advisory.DestinationSource;
 import org.apache.activemq.command.ActiveMQTopic;
+
 
 public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	private static final long serialVersionUID = 1L;
@@ -30,13 +34,18 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	}
 
 	private void connectToBroker() {
-		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		properties.put(Context.INITIAL_CONTEXT_FACTORY,
+				"org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+		properties.put(Context.PROVIDER_URL, "tcp://localhost:61616");
 
 		// Create a Connection
 		ActiveMQConnection connection = null;
 		try {
-			connection = (ActiveMQConnection)connectionFactory.createConnection();
-
+			Context context = new InitialContext(properties);
+			ActiveMQConnectionFactory factory = (ActiveMQConnectionFactory) context.lookup("ConnectionFactory");
+			connection = (ActiveMQConnection)factory.createConnection();
+			
 			connection.start();
 			DestinationSource ds = connection.getDestinationSource();
 			Set<ActiveMQTopic> topics = ds.getTopics();
