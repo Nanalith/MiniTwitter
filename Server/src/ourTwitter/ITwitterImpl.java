@@ -4,10 +4,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-import javax.jms.JMSException;
-import javax.jms.Session;
+import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -19,6 +19,11 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 	private static final long serialVersionUID = 1L;
 	private HashMap<String, AbstractMap.SimpleEntry<String, String>> usersMap;
 	private List<String> hashtagsList;
+
+	private javax.jms.Session sendSession = null;
+	private javax.jms.MessageProducer sender = null;
+	private Context context;
+	private static final long   MESSAGE_LIFESPAN = 86400000; //24h
 
 	private Session session;
 
@@ -39,7 +44,7 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 		// Create a Connection
 		ActiveMQConnection connection = null;
 		try {
-			Context context = new InitialContext(properties);
+			context = new InitialContext(properties);
 			ActiveMQConnectionFactory factory = (ActiveMQConnectionFactory) context.lookup("ConnectionFactory");
 			connection = (ActiveMQConnection)factory.createConnection();
 			//connection.getClientID()
@@ -51,11 +56,22 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 			}
 			// Create a Session
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			newHashtag("HashtagList");
+			declareWriter(connection);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("couldn't connect to Apache");
 		}
 	}
+
+	private void declareWriter(Connection connect) {
+		try {
+			sendSession = connect.createSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
+		} catch (javax.jms.JMSException jmse) {
+			jmse.printStackTrace();
+		}
+	}
+
 
 	@Override
 	public String connect(String pseudo, String pass) throws RemoteException {
@@ -72,12 +88,29 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 		// Create the destination (topic)
 		try {
 			session.createTopic(hashtag);
+			publishNewHashtag(hashtag);
 		} catch (JMSException e) {
 			System.out.println("couldn't create the hashtag ! :(");
 		}
 		hashtagsList.add(hashtag);
 		
 		return true;
+	}
+
+	private void publishNewHashtag(String hashtag) {
+		Topic topic = null;
+		try {
+			topic = (Topic) context.lookup("dynamicTopics/hashtagList");
+			sender = sendSession.createProducer(topic);
+			MapMessage mess = sendSession.createMapMessage();
+			mess.setString("content", "A new Hashtag was created ! \""+hashtag+"\"");
+			sender.send(mess, javax.jms.DeliveryMode.PERSISTENT, //publish persistently
+					9,//maximum priority
+					MESSAGE_LIFESPAN); // equivaut à publier dans le topic
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -95,18 +128,6 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 
 	public HashMap<String, AbstractMap.SimpleEntry<String, String>> getUsersMap() {
 		return usersMap;
-	}
-
-	public void setUsersMap(HashMap<String, AbstractMap.SimpleEntry<String, String>> usersMap) {
-		this.usersMap = usersMap;
-	}
-
-	public List<String> getHashtagsList() {
-		return hashtagsList;
-	}
-
-	public void setHashtagsList(List<String> hashtagsList) {
-		this.hashtagsList = hashtagsList;
 	}
 
 }
