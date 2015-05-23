@@ -30,8 +30,11 @@ public class Publisher {
 
             javax.jms.ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
             connect = factory.createConnection();
+
             sendSession = connect.createSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
+
             connect.start(); // on peut activer la connection.
+
         } catch (javax.jms.JMSException jmse) {
             jmse.printStackTrace();
         } catch (NamingException e) {
@@ -47,7 +50,7 @@ public class Publisher {
         //TODO: on pourrait aussi conserver les objets sender sur chaque topic o� on a d�j� publi�, pour pas avoir � la recr�er
         //� chaque fois ^^
         MapMessage mess = sendSession.createMapMessage();
-        mess.setString(hashTag, message);
+        mess.setString("content", message);
         sender.send(mess); // equivaut � publier dans le topic
     }
 }

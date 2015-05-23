@@ -53,8 +53,8 @@ public class Subscriber implements javax.jms.MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            System.out.print("Receive from topic : " + ((MapMessage)message).getString("nom"));
-            System.out.println(((MapMessage)message).getString("num"));
+            System.out.print("Message received : ");
+            System.out.println(((MapMessage)message).getString("content"));
         } catch (JMSException e) {
             e.printStackTrace();
         }
