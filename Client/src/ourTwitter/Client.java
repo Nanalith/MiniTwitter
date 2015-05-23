@@ -24,7 +24,7 @@ public class Client {
 		topics.add(t);
 	}
 
-	public static void main(String[] args) throws RemoteException, MalformedURLException, UnknownHostException, NotBoundException, JMSException {
+	public static void main(String[] args) throws RemoteException, MalformedURLException, UnknownHostException, NotBoundException, JMSException, NamingException {
         Client c = new Client();
     	
     	System.out.println("Bonjour, je me connecte � Twitter ! #Awesome");
@@ -42,18 +42,26 @@ public class Client {
         	System.out.println("Compte déjà existant");
         }
         
-        System.out.println("j'essaie de me connecter, et la réponse est : "+twitter.connect("Nana","jaimelescookies"));
+        System.out.println("j'essaie de me connecter, et la réponse est : " + twitter.connect("Nana","jaimelescookies"));
 
         Publisher myPub = new Publisher();
         myPub.configurer();
         
         Subscriber mySub = new Subscriber();
-        c.addTopics(mySub.configurer()); // TODO pour l'instant s'abonne à exo2 
-        System.out.println("My topics:" + c.getTopics());
+        mySub.configurer(); 
+        
+        // Au début on est abonné à rien 
+        System.out.println("My topics:" + c.getTopics()); // vide
  
-
+        // Création du tag cookie
         System.out.println("Création d'un topic \"cookies\"");
         twitter.newHashtag("cookies");
+        
+        // Abonnement au tag cookies
+        c.addTopics(mySub.souscripteur("cookies"));
+        System.out.println("My topics:" + c.getTopics());
+        
+        // Publier sur le tag cookie
         try {
             System.out.println("Ecriture sur le hashtag cookies");
             myPub.tweet("cookies", "les cookies c'est chouette ");
@@ -61,6 +69,7 @@ public class Client {
             e.printStackTrace();
             System.out.println("couldn't write to the topic :(");
         }
+        
     }
 }
 

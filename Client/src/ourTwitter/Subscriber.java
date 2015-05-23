@@ -11,13 +11,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-
 public class Subscriber implements javax.jms.MessageListener {
     private javax.jms.Connection connect = null;
     private javax.jms.Session receiveSession = null;
     InitialContext context = null;
    
-    public Topic configurer() throws JMSException {
+    public void configurer() throws JMSException {
         try {	
         	// Create a connection
             Hashtable properties = new Hashtable();
@@ -30,36 +29,25 @@ public class Subscriber implements javax.jms.MessageListener {
             javax.jms.ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
             connect = factory.createConnection();
 
-            Topic t = this.configurerSouscripteur();
+            receiveSession = connect.createSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
             connect.start();
-            return t;
+
         } catch (javax.jms.JMSException jmse){
             jmse.printStackTrace();
         } catch (NamingException e) {
             e.printStackTrace();
         }
-		return null;      
     }
     
-    private Topic configurerSouscripteur() throws JMSException, NamingException{
-    	// Open a session
-        receiveSession = connect.createSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
-        
-        Topic topic = (Topic) context.lookup("dynamicTopics/topicExo2");
+    public Topic souscripteur(String name) throws JMSException, NamingException{
+        Topic topic = (Topic) context.lookup("dynamicTopics/" + name);
           
         System.out.println("Topic name " + topic.getTopicName());
         javax.jms.MessageConsumer topicReceiver = receiveSession.createConsumer(topic);
         
         topicReceiver.setMessageListener(this);
         
-        return topic;
-          
-//        //ESSAI d'une reception synchrone
-//        connect.start(); // on peut activer la connection.
-//        while (true){
-//            Message m= topicReceiver.receive();
-//            System.out.print("recept synch: "); onMessage(m);
-//        }
+        return topic;        
     }
 
     @Override

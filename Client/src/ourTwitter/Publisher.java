@@ -19,7 +19,7 @@ public class Publisher {
     public void configurer() throws JMSException {
 
         try {    // Create a connection
-            // Si le producteur et le consommateur étaient codés séparément, ils auraient eu ce même bout de code
+            // Si le producteur et le consommateur ï¿½taient codï¿½s sï¿½parï¿½ment, ils auraient eu ce mï¿½me bout de code
 
             Hashtable properties = new Hashtable();
             properties.put(Context.INITIAL_CONTEXT_FACTORY,
@@ -44,10 +44,10 @@ public class Publisher {
     public void tweet(String hashTag, String message) throws JMSException, NamingException {
         Topic topic = (Topic) context.lookup("dynamicTopics/"+hashTag);
         sender = sendSession.createProducer(topic);
-        //TODO: on pourrait aussi conserver les objets sender sur chaque topic où on a déjà publié, pour pas avoir à la recréer
-        //à chaque fois ^^
+        //TODO: on pourrait aussi conserver les objets sender sur chaque topic oï¿½ on a dï¿½jï¿½ publiï¿½, pour pas avoir ï¿½ la recrï¿½er
+        //ï¿½ chaque fois ^^
         MapMessage mess = sendSession.createMapMessage();
         mess.setString(hashTag, message);
-        sender.send(mess); // equivaut à publier dans le topic
+        sender.send(mess); // equivaut ï¿½ publier dans le topic
     }
 }
