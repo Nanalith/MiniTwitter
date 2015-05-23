@@ -66,19 +66,22 @@ public class Client {
 	}
 	
 	public void newTag(String tag) throws RemoteException {
-		twitter.newHashtag(tag);
-		System.out.println(this.name + " created the topic " + tag);
+		if(twitter.newHashtag(tag)) {
+			System.out.println(this.name + " created the topic " + tag);
+		} else {
+			System.out.println(this.name + " can't create the topic " + tag + ", it already exists");
+		}	
 	}
 
-	public void sabonner(String tag) throws JMSException, NamingException {
+	public void subscribe(String tag) throws JMSException, NamingException {
 		addTopics(mySub.sabonner(tag));
 		System.out.println(this.name + " is abonned to " + tag);
 	}
 
-	public void publier(String tag, String message) throws JMSException {
+	public void publish(String tag, String message) throws JMSException {
 		try {
 			myPub.tweet(tag, message);
-			System.out.println(this.name + " wrote on the tag " + tag);
+			System.out.println(this.name + " wrote on the tag " + tag + "the message " + message);
 		} catch (NamingException e) {
 			e.printStackTrace();
 			System.out.println("Couldn't write to the topic :(");
@@ -93,7 +96,6 @@ public class Client {
 		topics.add(t);
 	}
 	
-
 	public static void main(String[] args) throws RemoteException,
 			MalformedURLException, UnknownHostException, NotBoundException,
 			JMSException, NamingException {
@@ -111,19 +113,20 @@ public class Client {
 		c.createAccount("Nana", "jaimelescookies");
 		c.connect("Nana", "jaimelescookies"); // TODO securiser !
 		c.retrieveTopics();
-		c.newTag("cookies"); // TODO gerer si on créer 2 fois le meme tag
-		c.sabonner("cookies");
-		c.publier("cookies", "les cookies c'est chouette");
+		c.newTag("cookies");
+		c.subscribe("cookies");
+		c.publish("cookies", "les cookies c'est chouette");
 
 		System.out.println("\n--------\n");
+		
 		// Deuxieme client
 		Client c2 = new Client();
 		c2.config();
 		c2.createAccount("Garance", "jaimeaussilesbrownies");
 		c2.connect("Garance", "jaimeaussilesbrownies");
 		c2.retrieveTopics();
-		c2.sabonner("cookies");
-		c2.publier("cookies", "oui mais les browkies c'est encore mieux");
+		c2.subscribe("cookies");
+		c2.publish("cookies", "oui mais les browkies c'est encore mieux");
 
 	}
 }
