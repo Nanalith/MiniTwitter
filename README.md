@@ -5,6 +5,7 @@ Garance Vallat
 Anaïs Marongiu
 SI4
 
+
 Pour faire tourner le projet
 -------------------------------
 
@@ -25,7 +26,8 @@ Aspects non développés
 -------------------------------
 1. "Dans une version plus sophistiquée, on pourrait utiliser un topic (auquel tous les clients souscrivent) permettant de diffuser l'information quant à l'existance d'un nouvel hashtag."
 
-2. "Dans une version plus sophistiquée, il faudrait trouver un moyen pour que les topics soient non seulement persistants (même si le serveur tweeter est éteint), mais les messages qu'ils contiennent également. Et qu'un abonné à un tel topic puisse également être notifié des messages publiés alors qu'il n'était pas connecté."
+2. "Dans une version plus sophistiquée, il faudrait trouver un moyen pour que les topics soient non seulement persistants (même si le serveur tweeter est éteint), mais les messages qu'ils contiennent également et qu'un abonné à un tel topic puisse également être notifié des messages publiés alors qu'il n'était pas connecté."
+
 
 Organisation du code
 -------------------------------
