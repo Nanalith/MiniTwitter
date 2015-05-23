@@ -16,6 +16,7 @@ public class Client {
         System.out.println("Bonjour, je me connecte � Twitter ! #Awesome");
         
         System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"\\java.policy");
+        //System.setProperty("java.security.policy","file:"+System.getProperty("user.dir")+"/java.policy");
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager());
