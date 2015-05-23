@@ -5,11 +5,10 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -110,7 +109,7 @@ public class Client {
 	public void publish(String tag, String message) throws JMSException {
 		try {
 			myPub.tweet(tag, message, context);
-			System.out.println(this.name + " wrote on the tag " + tag + "the message " + message);
+			System.out.println(this.name + " wrote on the tag \"" + tag + "\" the message : " + message);
 		} catch (NamingException e) {
 			e.printStackTrace();
 			System.out.println("Couldn't write to the topic :(");
@@ -125,52 +124,18 @@ public class Client {
 		topics.add(t);
 	}
 	
-	public static void main(String[] args) throws RemoteException,
-			MalformedURLException, UnknownHostException, NotBoundException,
-			JMSException, NamingException {
-		System.out.println("Bienvenue sur Twitter ! #Awesome");
-
-		System.setProperty("java.security.policy",
-				"file:" + System.getProperty("user.dir") + "/java.policy");
-		if (System.getSecurityManager() == null) {
-			System.setSecurityManager(new RMISecurityManager());
-		}
-
-		// Création et configuration du client
-		Client c = new Client();
-		c.config();
-		c.createAccount("Nana", "jaimelescookies");
-		c.connect("Nana", "jaimelescookies"); // TODO securiser !
-		c.retrieveTopics();
-		c.newTag("cookies");
-		c.subscribe("cookies");
-		c.publish("cookies", "les cookies c'est chouette");
-
-		System.out.println("\n--------\n");
-		
-		// Deuxieme client
-		Client c2 = new Client();
-		c2.config();
-		c2.createAccount("Garance", "jaimeaussilesbrownies");
-		c2.connect("Garance", "jaimeaussilesbrownies");
-		c2.retrieveTopics();
-		c2.subscribe("cookies");
-		c2.publish("cookies", "oui mais les browkies c'est encore mieux");
-
-		c2.getConnect().close();
-		c.publish("cookies", "j'aurai le dernier mot !");
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		c2.connect("Garance", "jaimeaussilesbrownies");
-		c2.subscribe("cookies");
-
-
-	}
-
 	public Connection getConnect() {
 		return connect;
 	}
+	
+	public void disconnect() {
+		try {
+			this.connect.close();
+			System.out.println(this.name + " is deconnected");
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }
