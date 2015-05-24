@@ -56,7 +56,7 @@ public class ITwitterImpl extends UnicastRemoteObject implements ITwitter {
 			}
 			// Create a Session
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			newHashtag("HashtagList");
+			newHashtag("hashtagList");
 			declareWriter(connection);
 		} catch (Exception e) {
 			e.printStackTrace();
