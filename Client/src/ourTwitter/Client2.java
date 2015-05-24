@@ -27,7 +27,7 @@ public class Client2 {
 		c2.connect("Garance", "jaimeaussilesbrownies");
 		c2.retrieveTopics();
 		c2.subscribe("cookies");
-		c2.publish("cookies", "oui mais les browkies c'est encore mieux");
+		c2.publish("cookies", "le browkie c'est un mélange de brownie et de cookies");
 		c2.disconnect();	
 		try {
 			Thread.sleep(10000);

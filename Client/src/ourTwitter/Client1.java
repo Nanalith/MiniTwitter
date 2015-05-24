@@ -37,7 +37,7 @@ public class Client1 {
 			e.printStackTrace();
 		}
 
-		c.publish("cookies", "j'aurai le dernier mot !");
+		c.publish("cookies", "oui mais les cookies c'est mieux que les brownies");
 		c.disconnect();
 	}
 }

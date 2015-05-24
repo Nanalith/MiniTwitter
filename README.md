@@ -9,10 +9,10 @@ SI4
 Pour faire tourner le projet
 -------------------------------
 1. Lancer le server Apache 
-	./activemq restart
-2. Lancer le server RMI
-3. Lancer le client 1
-4. Lancer le client 2 juste derriere
+	./activemq start
+2. Lancer le server RMI (classe Server)
+3. Lancer le client 1 (classe Client1)
+4. Lancer le client 2 juste derriere (classe Client2)
 	
 
 Fonctionnalités
